@@ -1,0 +1,134 @@
+html, body{
+    padding: 0;
+    margin:0;
+    width:100%;
+    height:100vh;
+}
+
+.course-title, .footer {
+    background-color: #013a55;
+}
+
+.course-info .title {
+    color: white;
+    font-size: 3.125rem;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 900;
+}
+
+.course-info .description {
+    color: white;
+}
+
+.enroll-btn {
+    color: white;
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 900;
+}
+
+.tag {
+    display: flex;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    background-color: #213147;
+}
+
+.tag .icon {
+    margin-right: 5px;
+}
+
+.info .title {
+    color: rgb(5, 25, 45);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.info .content {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.form-floating .address {
+    max-height: 100px;
+}
+
+.enroll-btn {
+    background-color: white;
+    border: 1px solid #213147;
+    color: #213147;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.enroll-btn:hover {
+    background-color: #213147;
+    color: white;
+}
+
+.what-will-learn .content {
+    font-family: 'Open Sans', sans-serif;
+    color: #213147;
+}
+
+.what-will-learn .content ul li {
+    width: 50%;
+    display: flex;
+    padding: 3px;
+}
+
+.what-will-learn .content ul li div {
+    margin-left: 10px;
+}
+
+.price {
+    color: white;
+    margin-right: 10px;
+}
+
+.price.original {
+    font-size: 20px;
+}
+
+.footer {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.logo {
+    font-size: 50px;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.about .title, .courses .title {
+    color: #acb2bb;
+    padding: 5px 10px;
+    color: white;
+}
+
+.about .content, .info {
+    padding: 5px 15px;
+    color: white;
+}
+
+.courses ul {
+    list-style-type: disc;
+}
+
+.courses ul li {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.subscribe input {
+    color: #213147;
+}
+
+.subscribe .sub {
+    height: calc(3.5rem + 2px);
+    margin-left: 10px;
+}
+
+/* Navbar */
+
+.navbar {
+    background-color: #013a55;
+}

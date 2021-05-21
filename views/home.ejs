@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Home</title>
+
+    <!-- Tailwind -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Font awsome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+    <!-- Css file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+      <div class="container d-flex">
+          <a class="navbar-brand text-white" href="/">Logo</a>
+          <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse d-flex justify-content-end " id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" aria-current="page" href="/profile">Profile</a>
+              </li>
+              <% if (!loggedin) { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Login/Register 
+                </a>
+                
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/login">Login</a></li>
+                  <li><a class="dropdown-item" href="/register">Register</a></li>                  
+                </ul>                
+              </li>
+              <% } %>
+              <% if (loggedin){ %>
+              <li class="nav-item">
+                <form action="/logout?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-link text-white text-decoration-none">Log Out</button>
+                </form>
+              </li>
+              <% } %>
+              
+            </ul>
+            
+          </div>
+      </div>
+  </div>
+</nav>
+
+<div class="container-fluid course-title">
+      <div
+        class="container d-flex p-6 justify-content-center align-items-center"
+      >
+        <div class="course-info d-flex flex-column">
+          <div class="title w-4/5">
+            Machine Learning A-Z: Hands-On Python In Data Science
+          </div>
+          <p class="description w-4/5 mt-3">
+            Learn to create Machine Learning Algorithms in Python from two Data
+            Science experts. Code templates included.
+          </p>
+          <div class="enroll d-flex mt-2 align-items-center justify-content-between w-4/5">
+            <button class="btn btn-outline-light enroll-btn">Enroll Now</button>
+            <div class="prices ">
+              <span class="price original">$9.99</span> <span class="price text-muted text-decoration-line-through">$94.99</span> <span class="price">89% off</span>
+            </div>
+          </div>
+          <div class="tags d-flex mt-4">
+            <div class="tag mr-3">
+              <div class="icon">
+                <i class="far fa-clock"></i>
+              </div>
+              <div class="content">2 Hours</div>
+            </div>
+            <div class="tag mx-3">
+              <div class="icon">
+                <i class="fas fa-play"></i>
+              </div>
+              <div class="content">10 videos</div>
+            </div>
+            <div class="tag mx-3">
+              <div class="icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="content">20 exercises</div>
+            </div>
+            <div class="tag mx-3">
+              <div class="icon">
+                <i class="fas fa-user-friends"></i>
+              </div>
+              <div class="content">50,500 Learners</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-image">
+          <img src="./images/logo.png" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="container desc-enroll d-flex mt-5">
+      <div class="w-1/2">
+        <div class="description">
+          <div class="title my-3">
+            <h2>Course Description</h2>
+          </div>
+          <div class="content">
+            What's behind the machine learning hype? In this non-technical course, you’ll learn everything you’ve been too afraid to ask about machine learning. There’s no coding required. Hands-on exercises will help you get past the jargon and learn how this exciting technology powers everything from self-driving cars to your personal Amazon shopping suggestions. How does machine learning work, when can you use it, and what is the difference between AI and machine learning? They’re all covered. Gain skills in this hugely in-demand and influential field, and discover why machine learning is for everyone!
+          </div>
+        </div>
+        <div class="what-will-learn">
+          <div class="title my-3">
+            <h2>What you'll learn</h2>
+          </div>
+          <div class="content">
+            <ul class="d-flex flex-wrap">
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Master Machine Learning on Python 
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Make accurate predictions
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Make robust Machine Learning models
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>              
+                  Use Machine Learning for personal purpose
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>                  
+                  Handle advanced techniques like Dimensionality Reduction
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Build an army of powerful Machine Learning models and know how to combine them to solve any problem
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Have a great intuition of many Machine Learning models
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Make powerful analysis
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>                  
+                  Create strong added value to your business
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Handle specific topics like Reinforcement Learning, NLP and Deep Learning`
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check"></i>
+                <div>
+                  Know which Machine Learning model to choose for each type of problem
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>        
+      <div class="enroll w-1/2 px-5 my-5 ml-5 d-flex flex-column justify-content-center">
+        <!-- <div class="form">               -->
+          <h3 class="mb-3">Enroll Now: </h3>
+          <form action="" >
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="name" placeholder="Full name">
+              <label for="name">Full name</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="email" placeholder="email Address">
+              <label for="email">Email address</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="phone" placeholder="Phone number">
+              <label for="phone">Phone number</label>
+            </div>
+            <div class="form-floating mb-3">
+              <textarea class="form-control address" placeholder="Address" id="address"></textarea>
+              <label for="address">Address</label>
+            </div>
+            <button class="btn w-full enroll-btn py-2">Entroll</button>
+          </form>
+        <!-- </div> -->
+      </div>
+    </div>
+    <div class="container-fluid footer py-5">
+      <div class="container d-flex flex-column">
+        <div class="logo">
+            LOGO
+        </div>
+        <div class="footer-content d-flex">          
+          <div class="company w-1/3">
+            <div class="about">
+              <div class="title w-25">About us</div>
+              <div class="content">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eum amet adipisci minus ab, quas dicta totam officia. Quo optio officiis eaque quidem nobis soluta esse, sint temporibus id impedit dolore molestiae alias corporis inventore, blanditiis adipisci labore architecto tempore cumque sit ab. Velit nesciunt totam magnam vero, ipsum consequatur.
+              </div>
+            </div>
+            <div class="info">
+              <div class="phone">
+                205-463-6100
+              </div>
+              <div class="address">
+                2867  Broad Street, INDEPENDENCE OH Ohio, 44131
+              </div>
+            </div>
+          </div>
+          <div class="courses w-1/3 ">
+            <div class="title">Check more courses</div>
+            <ul>
+              <li>Probabilistic Models Introduction</li>
+              <li>Data Analysis In Social Science</li>
+              <li>Statistics Fundamentals</li>
+              <li>Machine Learning With Python</li>
+              <li>Big Data Analysis</li>
+              <li>Deep Neural Networks</li>
+              <li>Clustering Methodologies</li>
+            </ul>
+          </div>
+          <div class="subscribe w-1/3">
+            <form action="" class="d-flex">
+              <div class="form-floating w-9/12 mb-3">
+                  <input type="email" class="form-control" id="emailAddress" placeholder="Email address">
+                  <label for="emailAddress">Email address</label>
+              </div>
+              <button class="btn sub btn-outline-light w-3/12">Subscribe</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</body>
+</html>
