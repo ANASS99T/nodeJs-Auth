@@ -53,7 +53,7 @@
               <% } %>
               <% if (loggedin){ %>
               <li class="nav-item">
-                <form action="/logout?_method=DELETE" method="POST">
+                <form action="/logout" method="POST">
                   <button type="submit" class="btn btn-link text-white text-decoration-none">Log Out</button>
                 </form>
               </li>
@@ -64,8 +64,26 @@
       </div>
   </div>
 </nav>
-    <div class="container">
-        <h1 classe="text-center">This is profile for : <%= name %></h1>
+    <div class="container ">
+        <div class="profile w-1/2 m-auto mt-5">
+          <table class="table">
+            
+            <tbody>
+              <tr class="table-active text-center uppercase">
+                <th scope="row"colspan="2" > Profile info</th>
+              </tr>
+              <tr >
+                <th scope="row" class="text-center">Name : </th>
+                <td class="text-center"><%=name%></td>
+              </tr>
+              <tr class="table-active text-center">
+                <th scope="row" class="text-center">Email : </th>
+                <td class="text-center"><%=email%></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
     </div>
 
 </body>

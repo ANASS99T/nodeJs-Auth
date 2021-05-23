@@ -52,7 +52,7 @@
               <% } %>
              <% if (loggedin == true){ %>
               <li class="nav-item">
-                <form action="/logout?_method=DELETE" method="POST">
+                <form action="/logout" method="POST">
                   <button type="submit" class="btn btn-link text-white text-decoration-none">Log Out</button>
                 </form>
               </li>
@@ -77,8 +77,8 @@
               <label for="password">Password</label>
             </div>
             <div class="error mb-3 text-danger">
-              <% if (messages.error) { %>
-                <%= messages.error %>
+              <% if (message) { %>
+                <div class="alert alert-danger"><%= message %></div>
               <% } %>
             </div>
             <button type="submit" class="btn w-full enroll-btn py-2">Login</button>

@@ -1,106 +1,185 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+  require('dotenv').config();
 }
 
-const express = require('express')
-const app = express()
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-const methodOverride = require('method-override')
+const express = require('express');
+const app = express();
+const bcrypt = require('bcrypt');
+const mysql = require('mysql');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
-const initializePassport = require('./passport-config')
-initializePassport(
-  passport,
-  email => users.find(user => user.email === email),
-  id => users.find(user => user.id === id)
-)
+const database = mysql.createConnection({
+  host: process.env.db_host,
+  user: process.env.db_user,
+  password: process.env.db_password,
+  database: process.env.db_database,
+});
 
-const users = []
+database.connect((err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('MySql is connected');
+  }
+});
+
+
+
+// const users = [];
 var loggedin = false;
-app.set('view-engine', 'ejs')
+var message = null
+app.set('view-engine', 'ejs');
 app.use(express.static(__dirname + '/views'));
-app.use(express.urlencoded({ extended: false }))
-app.use(flash())
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false
-}))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(methodOverride('_method'))
+app.use(express.urlencoded({ extended: false }));
 
-app.get('/', checkHomeAuthenticated, (req, res) => {
+app.use(cookieParser());
+app.get('/', validateCookie, (req, res) => {
   res.render('home.ejs', { loggedin: loggedin });
 });
 
-app.get('/home', checkHomeAuthenticated, (req, res) => {
+app.get('/home', validateCookie, (req, res) => {
   res.render('home.ejs', { loggedin: loggedin });
 });
 
-app.get('/profile', checkAuthenticated, (req, res) => {
-  res.render('profile.ejs', { name: req.user.name, loggedin: true });
+app.get('/profile', validateCookie, (req, res) => {
+  if(!loggedin)
+    res.redirect('/')
+  else
+    res.render('profile.ejs', {
+      name: req.cookies.name,
+      email: req.cookies.email,
+      loggedin: true,
+    });
 });
 
-app.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login.ejs', { loggedin: false });
-})
+app.get('/login', validateCookie, (req, res) => {
+  if(!loggedin)
+    res.render('login.ejs', { loggedin: false, message: message });
+  else
+    res.redirect('/');
+    
+  
+});
 
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}))
-
-app.get('/register', checkNotAuthenticated, (req, res) => {
-  res.render('register.ejs', { loggedin: false });
-})
-
-app.post('/register', checkNotAuthenticated, async (req, res) => {
+app.post('/login', validateCookie, async (req, res) => {
+  if(loggedin){
+    res.redirect('/')
+  }
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword
-    })
-    res.redirect('/login')
-  } catch {
-    res.redirect('/register')
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.render('login.ejs', {
+        message: 'Email or password is required',
+        loggedin: false
+      });
+    }
+    database.query(
+      'SELECT * FROM user WHERE email = ?',
+      [email],
+      async (error, results) => {
+        if (!results.length > 0  || !results[0]['email']|| !(await bcrypt.compare(password, results[0].password))) {
+          res.render('login.ejs', { message: 'Email or password incorrect', loggedin: false });
+        } else {
+          const id = results[0].id;
+          const name = results[0]['name'];
+          // const email = results[0]['email'];
+          const token = jwt.sign({ id }, process.env.JWT_TOKEN, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          });
+
+          const cookiesOptions = {
+            expires: new Date(
+              Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 3600000
+            ),
+            httpOnly: true,
+          };
+
+          res.cookie('sessionToken', token, cookiesOptions);
+          res.cookie('name', name, cookiesOptions);
+          res.cookie('email', email, cookiesOptions);          
+          loggedin = true;
+          res.redirect('/');
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
   }
-})
+});
 
-app.delete('/logout', (req, res) => {
-  req.logOut()
-  res.redirect('/')
-})
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
+app.get('/register', validateCookie, (req, res) => {
+  if(!loggedin)
+    res.render('register.ejs', { loggedin: loggedin, message:message });
+  else
+    res.redirect('/');
+});
+
+app.post('/register', validateCookie, async (req, res) => {
+  if(loggedin){
+      return res.redirect('/');
   }
-  res.redirect('/login')
-}
+  const { name, email, password, conf_password } = req.body;
 
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/login')
-  }
-  next()
-}
+  //Verify if email already exist and passwords match
+  database.query(
+    'SELECT email from user WHERE email = ?',
+    [email],
+    async (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+      if (result.length > 0) {
+        return res.render('register.ejs', { message: 'Email already exists', loggedin:false });
+      } else if (password !== conf_password) {
+        return res.render('register.ejs', { message: "Passwords don't match", loggedin: false });
+      } else {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        database.query(
+          'INSERT INTO user SET ?',
+          { name: name, email: email, password: hashedPassword },
+          (err, resu) => {
+            if (err) {
+              console.log(err);
+              return res.render('register.ejs', {
+                message: "Couldn't create the user, please try again",
+                loggin: false
+              });
+            }
+          }
+        );
+        return res.redirect('/login');
+      }
+    }
+  );
 
+});
 
-function checkHomeAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
+app.post('/logout', (req, res) => {
+  // req.logOut();
+
+  res.cookie('sessionToken', '', { maxAge: 0 });
+  res.cookie('name', '', { maxAge: 0 });
+  res.cookie('email', '', { maxAge: 0 });
+
+  loggedin = false
+  message = null
+  res.redirect('/');
+});
+
+function validateCookie(req, res, next){
+  const { cookies } = req
+  if ('sessionToken' in cookies){
     loggedin = true;
-    return next();
+    next();
+  } 
+  else{
+    loggedin = false;
+    next();
   }
-  loggedin = false;
-  return next();
+  
 }
 
-app.listen(3030)
-console.log('server is running on port: 3030')
+app.listen(3030);
+console.log('server is running on port: 3030');
